@@ -1,6 +1,6 @@
 -- Downloads all nbs files from https://github.com/TheInfamousAlk/nbs and puts them in /music/
 
-local nbsurl = "https://github.com/TheInfamousAlk/nbs"
+local nbsurl = "https://github.com/nimbuldev/mctv/tree/master/nbs"
 
 
 local function getFile(url, fname)
@@ -62,13 +62,11 @@ for nbsfile in string.gmatch(nbshtml, 'href="(.-)"') do
     end
 end
 
-
--- -- download all the nbs files with the getFile function
 local name
 for i, nbsfile in ipairs(nbsfiles) do
     name = nbsfile:match("^.+/(.+)$")
     name = name:gsub("%%20", "_")		
     name = name:match("(.+)%?") or name
     getFile(nbsfile, name)
-    os.sleep(0.5)
+    os.sleep(0.25)
 end
