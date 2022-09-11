@@ -15,6 +15,8 @@ local wave = dofile("apis/wave.lua") -- loads wave
 args = {...}
 interval = 0.05
 
+
+local fname
 local function findPer(pName)
 	if (peripheral.getName) then
 		local p = peripheral.find(pName)
@@ -79,7 +81,6 @@ if #args == 2 then
 	interval = tonumber(args[2])
 end
 
-local fname
 if http.checkURL(args[1]) then
 	fname = args[1]:match("^.+/(.+)$")
 	fname = fname:gsub("%%20", "_")		
