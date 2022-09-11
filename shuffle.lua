@@ -2,7 +2,7 @@
 -- Randomly selects a song from the music folder and plays it, songs can be downloaded with
 -- play.lua
 
-local waveurl = "https://github.com/nimbuldev/mctv/apis/wave.lua"
+local waveurl = "https://github.com/nimbuldev/mctv/raw/master/apis/wave.lua"
 local wavepath = "/apis/wave.lua"
 if not fs.exists(wavepath) then
 	print("Downloading wave API...")
