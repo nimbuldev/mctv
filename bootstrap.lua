@@ -21,7 +21,7 @@ local function getFile(url, fname)
             end
             if (r.getResponseCode() == 200) then
                 print("Creating file " .. fname)
-                local f = fs.open("/music/" .. fname, "wb")
+                local f = fs.open(fname, "wb")
                 if f then
                     print("Writing to file")
                     f.write(r.readAll())
