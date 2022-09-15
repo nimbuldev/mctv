@@ -1,17 +1,6 @@
 
 -- Plays songs from the music folder, songs can be downloaded with play.lua
 
-local waveurl = "https://github.com/nimbuldev/mctv/raw/master/apis/wave.lua"
-local wavepath = "/apis/wave.lua"
-if not fs.exists(wavepath) then
-	print("Downloading wave API...")
-	local wave = http.get(waveurl)
-	local wavefile = fs.open(wavepath, "w")
-	wavefile.write(wave.readAll())
-	wavefile.close()
-	wave.close()
-end
-
 local wave = dofile("apis/wave.lua")
 interval = 0.05
 index = 1
@@ -71,7 +60,6 @@ local files = fs.list("/music")
 
 local function play()
 
-    -- Loop index if below 1 or above the number of files
     if (index < 1) then
         index = #files
     elseif (index > #files) then
