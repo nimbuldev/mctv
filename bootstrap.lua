@@ -41,10 +41,10 @@ local function getFile(url, fname)
 end
 
 print("Downloading wave.lua")
-getFile(repo .. wavepath, wavepath)
+getFile(repo .. wavepath .. "?raw=true", wavepath)
 
 print("Downloading shuffle.lua")
-getFile(repo..shufflepath, "shuffle.lua")
+getFile(repo..shufflepath .. "?raw=true", "shuffle.lua")
 
 print("Downloading songs...")
 os.sleep(0.5)
