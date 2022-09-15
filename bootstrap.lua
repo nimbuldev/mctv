@@ -61,7 +61,7 @@ end
 
 print("Downloading songs...")
 os.sleep(0.5)
-local nbs = http.get(nbspath)
+local nbs = http.get(repo..nbspath)
 local nbshtml = nbs.readAll()
 nbs.close()
 
