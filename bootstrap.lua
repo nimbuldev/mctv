@@ -7,28 +7,9 @@ local shufflepath = "/shuffle.lua"
 local nbspath = "/nbs/"
 
 
-if not fs.exists(wavepath) then
-	print("Downloading wave API...")
-    os.sleep(0.5)
-	local wave = http.get(repo..wavepath)
-	local wavefile = fs.open(wavepath, "w")
-	wavefile.write(wave.readAll())
-	wavefile.close()
-	wave.close()
-end
-
-if not fs.exists(shufflepath) then
-    print("Downloading shuffle.lua...")
-    os.sleep(0.5)
-    local shuffle = http.get(repo..shufflepath)
-    local shufflefile = fs.open(shufflepath, "w")
-    shufflefile.write(shuffle.readAll())
-    shufflefile.close()
-    shuffle.close()
-end
 
 local function getFile(url, fname)
-	if (not fs.exists("/music/"..fname)) then
+	if (not fs.exists(fname)) then
 		print("GETTING " .. url)
 		local r = http.get(url, nil, true)
         if r then
@@ -59,6 +40,12 @@ local function getFile(url, fname)
 	end
 end
 
+print("Downloading wave.lua")
+getFile(repo .. wavepath, wavepath)
+
+print("Downloading shuffle.lua")
+getFile(repo..shufflepath, "shuffle.lua")
+
 print("Downloading songs...")
 os.sleep(0.5)
 local nbs = http.get(repo..nbspath)
@@ -84,6 +71,6 @@ for i, nbsfile in ipairs(nbsfiles) do
     name = nbsfile:match("^.+/(.+)$")
     name = name:gsub("%%20", "_")		
     name = name:match("(.+)%?") or name
-    getFile(nbsfile, name)
+    getFile(nbsfile, "/music/"..name)
     os.sleep(0.25)
 end
