@@ -1,5 +1,3 @@
--- Downloads songs and shuffle.lua from https://github.com/nimbuldev/mctv  
-
 local repo = "https://github.com/nimbuldev/mctv/raw/master"
 
 local wavepath = "/apis/wave.lua"

@@ -1,9 +1,6 @@
-
--- Plays songs from the music folder, songs can be downloaded with play.lua
-
+local args = {...}
 local wave = dofile("apis/wave.lua")
 interval = 0.05
-
 
 local function findPer(pName)
     if (peripheral.getName) then
@@ -27,8 +24,6 @@ local function findPer(pName)
 end
  
 local function getKeypress()
-
-    -- I would prefer if the song was skipped only when a certain key is pressed but...
     local event, key = os.pullEvent("key")
     term.clear()
     if (key == 208) then
@@ -44,31 +39,25 @@ local function getKeypress()
     end
     return key
 end
- 
-local args = {...}
+
 if #args ~= 0 then
     print("Does not take arguments, plays all songs in the music folder, press up/down to change the interval, left/right to change the song")
     return
 end
  
- 
 local dir, speaker = findPer("speaker")
 local wc
- 
 local files = fs.list("/music")
 index = math.random(1, #files)
 
 local function play()
-
     if (index < 1) then
         index = #files
     elseif (index > #files) then
         index = 1
     end
-
     term.clear()
     term.setCursorPos(1,1)
-    
     for i=index - 4, index + 4 do
         if (i == index) then
             term.setTextColor(colors.yellow)
