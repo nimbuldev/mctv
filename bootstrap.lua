@@ -1,6 +1,6 @@
 -- Downloads songs and shuffle.lua from https://github.com/nimbuldev/mctv  
 
-local repo = "https://github.com/nimbuldev/mctv/raw/master/"
+local repo = "https://github.com/nimbuldev/mctv/raw/master"
 
 local wavepath = "/apis/wave.lua"
 local shufflepath = "/shuffle.lua"
@@ -19,13 +19,13 @@ local function getFile(url, fname)
                 return getFile(loc, fname)
             end
             if (r.getResponseCode() == 200) then
-                print("Creating file " .. fname)
+                -- print("Creating file " .. fname)
                 local f = fs.open(fname, "wb")
                 if f then
                     f.write(r.readAll())
                     f.close()
                 else
-                    print("Error: Could not open file")
+                    -- print("Error: Could not open file")
                 end
             else
                 -- print("Error: status code " .. r.getResponseCode())
