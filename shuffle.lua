@@ -37,6 +37,12 @@ local function getKeypress()
     elseif (key == 16) then
         os.queueEvent("terminate")
     end
+    if interval < 0.05 then
+        interval = 0.05
+    end
+    if interval > 0.99 then
+        interval = 0.99
+    end
     return key
 end
 
