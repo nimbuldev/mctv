@@ -3,7 +3,7 @@
 
 local wave = dofile("apis/wave.lua")
 interval = 0.05
-index = 1
+
 
 local function findPer(pName)
     if (peripheral.getName) then
@@ -56,7 +56,7 @@ local dir, speaker = findPer("speaker")
 local wc
  
 local files = fs.list("/music")
-
+index = math.random(1, #files)
 
 local function play()
 

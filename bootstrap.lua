@@ -1,11 +1,10 @@
 -- Downloads songs and shuffle.lua from https://github.com/nimbuldev/mctv  
 
-local repo = "https://github.com/nimbuldev/mctv/tree/master"
+local repo = "https://github.com/nimbuldev/mctv/raw/master/"
 
 local wavepath = "/apis/wave.lua"
 local shufflepath = "/shuffle.lua"
 local nbspath = "/nbs/"
-
 
 
 local function getFile(url, fname)
@@ -14,7 +13,7 @@ local function getFile(url, fname)
 		local r = http.get(url, nil, true)
         if r then
             if (r.getResponseCode() == 301 or r.getResponseCode() == 302) then
-                print("Redirected to " .. r.getResponseHeaders()["Location"])
+                -- print("Redirected to " .. r.getResponseHeaders()["Location"])
                 local loc = r.getResponseHeaders()["Location"]
                 r.close()
                 return getFile(loc, fname)
@@ -23,17 +22,16 @@ local function getFile(url, fname)
                 print("Creating file " .. fname)
                 local f = fs.open(fname, "wb")
                 if f then
-                    print("Writing to file")
                     f.write(r.readAll())
                     f.close()
                 else
                     print("Error: Could not open file")
                 end
             else
-                print("Error: status code " .. r.getResponseCode())
+                -- print("Error: status code " .. r.getResponseCode())
             end
         else 
-            print("Error: got nil response")
+            -- print("Error: got nil response")
         end
 	else
 		print("File already exists")
@@ -41,10 +39,10 @@ local function getFile(url, fname)
 end
 
 print("Downloading wave.lua")
-getFile(repo .. wavepath .. "?raw=true", wavepath)
+getFile(repo .. wavepath, wavepath)
 
 print("Downloading shuffle.lua")
-getFile(repo..shufflepath .. "?raw=true", "shuffle.lua")
+getFile(repo..shufflepath, "shuffle.lua")
 
 print("Downloading songs...")
 os.sleep(0.5)
