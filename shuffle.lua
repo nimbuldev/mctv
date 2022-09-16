@@ -23,6 +23,7 @@ local function findPer(pName)
     end
 end
  
+local paused = false
 local function getKeypress()
     local event, key = os.pullEvent("key")
     term.clear()
@@ -36,6 +37,9 @@ local function getKeypress()
         interval = interval - 0.01
     elseif (key == 16) then
         os.queueEvent("terminate")
+    -- If key is spacebar, set paused to true.
+    elseif (key == 57) then
+        paused = not paused
     end
     if interval < 0.05 then
         interval = 0.05
@@ -102,7 +106,7 @@ local function play()
         wc:addOutput(dir)
         local t = wave.loadTrack("/music/" .. fname)
         local instance = wc:addInstance(t)
-        while (instance.playing) do
+        while (instance.playing and not paused) do
             wc:update()
             os.sleep(interval) 
         end
