@@ -23,7 +23,6 @@ local function findPer(pName)
     end
 end
  
-local muted = false
 local function getKeypress()
     local event, key = os.pullEvent("key")
     term.clear()
@@ -37,9 +36,6 @@ local function getKeypress()
         interval = interval - 0.01
     elseif (key == 16) then
         os.queueEvent("terminate")
-    -- If key is m, set paused to true.
-    elseif (key == 32) then
-        muted = not muted
     end
     if interval < 0.05 then
         interval = 0.05
@@ -98,7 +94,7 @@ local function play()
     for i=1, term.getSize() do
         term.write("-")
     end
-    print("Press Q to quit, left/right to change interval, up/down to change song, m to mute")      
+    print("Press Q to quit, left/right to change interval, up/down to change song")      
     local fname = files[index]
     os.sleep(1)
     if (speaker ~= nil) then
@@ -107,10 +103,6 @@ local function play()
         local t = wave.loadTrack("/music/" .. fname)
         local instance = wc:addInstance(t)
         while (instance.playing) do
-            if (not muted) then
-                os.sleep(interval)
-                wc:update()
-            end
             os.sleep(interval) 
         end
         index = index + 1
