@@ -68,5 +68,4 @@ for i, nbsfile in ipairs(nbsfiles) do
     name = name:gsub("%%20", "_")		
     name = name:match("(.+)%?") or name
     getFile(nbsfile, "/music/"..name)
-    os.sleep(0.25)
 end
