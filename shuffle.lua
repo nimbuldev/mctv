@@ -1,3 +1,5 @@
+-- Todo: Make responsive to screen height
+
 local args = {...}
 local wave = dofile("apis/wave.lua")
 interval = 0.05
@@ -56,7 +58,10 @@ local wc
 local files = fs.list("/music")
 index = math.random(1, #files)
 
+
+
 local function play()
+    local w, h = term.getSize()
     if (index < 1) then
         index = #files
     elseif (index > #files) then
@@ -64,7 +69,10 @@ local function play()
     end
     term.clear()
     term.setCursorPos(1,1)
-    for i=index - 4, index + 4 do
+
+
+    local boundsize = h - 6
+    for i=boundsize, boundsize do
         if (i == index) then
             term.setTextColor(colors.yellow)
         else
@@ -84,7 +92,7 @@ local function play()
     end
     term.setCursorPos(1, 10)
     term.setTextColor(colors.white)
-    for i=1, term.getSize() do
+    for i=1, w do
         term.write("-")
     end
     print(" ")
