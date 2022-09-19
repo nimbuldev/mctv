@@ -72,24 +72,23 @@ local function play()
     
     
     local w, h = term.getSize()
-    local numElements = h - 6
-    local topBound = index - math.floor(numElements / 2)
-    local bottomBound = index + math.floor(numElements / 2)
+    local numElements = h - 8
+    local bound = index - math.floor(numElements / 2)
     for i=1, numElements do
-        if (i == index) then
+        term.setCursorPos(1, i)
+        if (i + bound == index) then
             term.setTextColor(colors.yellow)
         else
             term.setTextColor(colors.white)
         end
-        term.setCursorPos(1, i)
-        if (i + topBound < 1) then
-            term.write(files[i + topBound + #files])
-        elseif (i + topBound > #files) then
-            term.write(files[i + topBound - #files])
+        if (i + bound < 1) then
+            term.write(files[i + bound + #files])
+        elseif (i + bound > #files) then
+            term.write(files[i + bound - #files])
         else
-            term.write(files[i + topBound])
+            term.write(files[i + bound])
         end
-        
+
     end
     term.setCursorPos(1, numElements + 1)
     term.setTextColor(colors.white)
