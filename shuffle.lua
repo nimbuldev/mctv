@@ -79,17 +79,8 @@ local function play()
         else
             term.setTextColor(colors.white)
         end
-        term.setCursorPos(1, i - index + 6)
-        if (i < 1) then
-            term.write(files[#files + i])
-            print(" ")
-        elseif (i > #files) then
-            term.write(files[i - #files])
-            print(" ")
-        else
-            term.write(files[i])
-            print(" ")
-        end
+        term.setCursorPos(1, i)
+        term.write(files[i])
     end
     term.setCursorPos(1, 10)
     term.setTextColor(colors.white)
