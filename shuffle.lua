@@ -56,6 +56,7 @@ end
 local dir, speaker = findPer("speaker")
 local wc
 local files = fs.list("/music")
+
 index = math.random(1, #files)
 
 
@@ -71,9 +72,9 @@ local function play()
     
     
     local w, h = term.getSize()
-    local boundsize = h - 6
-    local bound = math.floor(boundsize / 2)
-    for i=1, bound do
+    local numElements = h - 6
+    local mid = math.floor(boundsize / 2)
+    for i=1, numElements do
         if (i == index) then
             term.setTextColor(colors.yellow)
         else
@@ -82,7 +83,7 @@ local function play()
         term.setCursorPos(1, i)
         term.write(files[i])
     end
-    term.setCursorPos(1, 10)
+    term.setCursorPos(1, numElements + 1)
     term.setTextColor(colors.white)
     for i=1, w do
         term.write("-")
