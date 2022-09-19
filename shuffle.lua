@@ -61,7 +61,6 @@ index = math.random(1, #files)
 
 
 local function play()
-    local w, h = term.getSize()
     if (index < 1) then
         index = #files
     elseif (index > #files) then
@@ -69,10 +68,12 @@ local function play()
     end
     term.clear()
     term.setCursorPos(1,1)
-
-
+    
+    
+    local w, h = term.getSize()
     local boundsize = h - 6
-    for i=boundsize, boundsize do
+    local bound = math.floor(boundsize / 2)
+    for i=1, bound do
         if (i == index) then
             term.setTextColor(colors.yellow)
         else
