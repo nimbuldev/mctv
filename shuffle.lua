@@ -73,7 +73,7 @@ local function play()
     
     local w, h = term.getSize()
     local numElements = h - 6
-    local mid = math.floor(boundsize / 2)
+    local mid = math.floor(numElements / 2)
     for i=1, numElements do
         if (i == index) then
             term.setTextColor(colors.yellow)
