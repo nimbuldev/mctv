@@ -1,4 +1,3 @@
--- Todo: Make responsive to screen height
 
 local args = {...}
 local wave = dofile("apis/wave.lua")
@@ -69,7 +68,6 @@ local function play()
     end
     term.clear()
     term.setCursorPos(1,1)
-    
     
     local w, h = term.getSize()
     local numElements = h - 8
