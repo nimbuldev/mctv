@@ -23,44 +23,11 @@ local function findPer(pName)
         end
     end
 end
- 
-local function getKeypress()
-    local event, key = os.pullEvent("key")
-    term.clear()
-    if (key == 208) then
-        index = index + 1
-    elseif (key == 200) then
-        index = index - 1
-    elseif (key == 205) then
-        interval = interval + 0.01
-    elseif (key == 203) then
-        interval = interval - 0.01
-    elseif (key == 16) then
-        os.queueEvent("terminate")
-    end
-    if interval < 0.05 then
-        interval = 0.05
-    end
-    if interval > 0.99 then
-        interval = 0.99
-    end
-    return key
-end
-
-if #args ~= 0 then
-    print("Does not take arguments, plays all songs in the music folder, press up/down to change the interval, left/right to change the song")
-    return
-end
- 
 local dir, speaker = findPer("speaker")
 local wc
 local files = fs.list("/music")
 
-index = math.random(1, #files)
-
-
-
-local function play()
+local function draw()
     if (index < 1) then
         index = #files
     elseif (index > #files) then
@@ -101,20 +68,69 @@ local function play()
         term.write("-")
     end
     print("Press Q to quit, left/right to change interval, up/down to change song")      
-    local fname = files[index]
-    os.sleep(1)
-    if (speaker ~= nil) then
-        wc = wave.createContext()
-        wc:addOutput(dir)
-        local t = wave.loadTrack("/music/" .. fname)
-        local instance = wc:addInstance(t)
-        while (instance.playing) do
-            os.sleep(interval) 
-        end
+end
+
+
+local function handleKeypress()
+    draw()
+    if (key == 208) then
         index = index + 1
+    elseif (key == 200) then
+        index = index - 1
+    elseif (key == 205) then
+        interval = interval + 0.01
+    elseif (key == 203) then
+        interval = interval - 0.01
+    elseif (key == 16) then
+        os.queueEvent("terminate")
+    end
+    if interval < 0.05 then
+        interval = 0.05
+    end
+    if interval > 0.99 then
+        interval = 0.99
+    end
+    return key
+end
+
+
+index = math.random(1, #files)
+
+
+if #args ~= 0 then
+    print("Does not take arguments, plays all songs in the music folder, press up/down to change the interval, left/right to change the song")
+    return
+end
+
+wc = wave.createContext()
+wc:addOutputs(speaker)
+
+
+local timer = os.startTimer(0.05)
+local function play()
+    local e = {os.pullEventRaw()}
+    if e[1] == "key" then
+        handleKeypress(e[2])
+	end
+    if e[1] == "timer" and e[2] == timer then
+        timer = os.startTimer(0.05)
+        local prevtick = instance.tick
+        wc:update()
     end
 end
- 
+
+local fname = files[index]
+local function playSong()
+    wc:removeInstance(1)
+    local t = wave.loadTrack("/music/" .. fname)
+    instance = wc:addInstance(t)
+    -- while (instance.playing) do
+    --     os.sleep(interval) 
+    -- end
+    index = index + 1
+end
+
+playSong()
 while true do
-    parallel.waitForAny(getKeypress, play)
+    play()
 end
