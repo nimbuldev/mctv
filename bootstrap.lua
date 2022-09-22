@@ -69,3 +69,6 @@ for i, nbsfile in ipairs(nbsfiles) do
     name = name:match("(.+)%?") or name
     getFile(nbsfile, "/music/"..name)
 end
+
+term.clear()
+print("Done!")
