@@ -55,9 +55,6 @@ for nbsfile in string.gmatch(nbshtml, 'href="(.-)"') do
         if string.sub(nbsfile, 1, 1) == "/" then
             nbsfile = "https://github.com" .. nbsfile
         end
-        if string.sub(nbsfile, 1, 1) ~= "/" and string.sub(nbsfile, 1, 4) ~= "http" then
-            nbsfile = nbsurl .. "/" .. nbsfile
-        end
         table.insert(nbsfiles, nbsfile)
     end
 end
