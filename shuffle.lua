@@ -19,11 +19,6 @@ local function playSong(songIndex)
 end
 
 local function draw()
-    if (CurrentSongIndex < 1) then
-        CurrentSongIndex = #files
-    elseif (CurrentSongIndex > #files) then
-        CurrentSongIndex = 1
-    end
     term.clear()
     term.setCursorPos(1,1)
     
@@ -74,6 +69,11 @@ local function handleKeypress(key)
         Interval = Interval - 0.01
     elseif (key == 16) then
         os.queueEvent("terminate")
+    end
+    if (CurrentSongIndex < 1) then
+        CurrentSongIndex = #files
+    elseif (CurrentSongIndex > #files) then
+        CurrentSongIndex = 1
     end
     if Interval < 0.05 then
         Interval = 0.05
