@@ -28,10 +28,23 @@ local function init()
     CurrentSongIndex = math.random(1, #files)
 end
 
+local function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
 local function playSong(songIndex)
     context:removeInstance(1)
     print("Playing song " .. songIndex)
-    print("#files = " .. #files)
+    print(dump(files))
     local fname = files[songIndex]
     print(fname)
     local t = wave.loadTrack("/music/" .. fname)
