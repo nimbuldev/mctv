@@ -6,9 +6,9 @@ local nbspath = "/nbs/"
 
 
 local function getFile(url, fname)
-	if (not fs.exists(fname)) then
-		print("GETTING " .. url)
-		local r = http.get(url, nil, true)
+    if (not fs.exists(fname)) then
+        print("GETTING " .. url)
+        local r = http.get(url, nil, true)
         if r then
             if (r.getResponseCode() == 301 or r.getResponseCode() == 302) then
                 -- print("Redirected to " .. r.getResponseHeaders()["Location"])
@@ -28,23 +28,23 @@ local function getFile(url, fname)
             else
                 -- print("Error: status code " .. r.getResponseCode())
             end
-        else 
+        else
             -- print("Error: got nil response")
         end
-	else
-		print("File already exists")
-	end
+    else
+        print("File already exists")
+    end
 end
 
 print("Downloading wave.lua")
 getFile(repo .. wavepath, wavepath)
 
 print("Downloading shuffle.lua")
-getFile(repo..shufflepath, "shuffle.lua")
+getFile(repo .. shufflepath, "shuffle.lua")
 
 print("Downloading songs...")
 os.sleep(0.5)
-local nbs = http.get(repo..nbspath)
+local nbs = http.get(repo .. nbspath)
 local nbshtml = nbs.readAll()
 nbs.close()
 
@@ -62,9 +62,9 @@ end
 local name
 for i, nbsfile in ipairs(nbsfiles) do
     name = nbsfile:match("^.+/(.+)$")
-    name = name:gsub("%%20", "_")		
+    name = name:gsub("%%20", "_")
     name = name:match("(.+)%?") or name
-    getFile(nbsfile, "/music/"..name)
+    getFile(nbsfile, "/music/" .. name)
 end
 
 term.clear()

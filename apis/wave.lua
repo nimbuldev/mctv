@@ -24,11 +24,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -- I'm so happy I don't have to write or understand this code, thanks! - ax.
 
 
-local wave = { }
+local wave = {}
 wave.version = "0.1.5"
 
-wave._oldSoundMap = {"harp", "bassattack", "bd", "snare", "hat"}
-wave._newSoundMap = {"harp", "bass", "basedrum", "snare", "hat"}
+wave._oldSoundMap = { "harp", "bassattack", "bd", "snare", "hat" }
+wave._newSoundMap = { "harp", "bass", "basedrum", "snare", "hat" }
 wave._defaultThrottle = 99
 wave._defaultClipMode = 1
 wave._maxInterval = 1
@@ -47,9 +47,9 @@ if _HOST then
 		_matches[#_matches + 1] = s
 	end
 
-	local _new = {1, 80}
+	local _new = { 1, 80 }
 	wave._isNewSystem = true
-	for i=1, #_new, 1 do
+	for i = 1, #_new, 1 do
 		if (i <= #_matches and _new[i] < tonumber(_matches[i])) then
 			break
 
@@ -63,19 +63,19 @@ if _HOST then
 
 end
 
-wave.context = { }
-wave.output = { }
-wave.track = { }
-wave.instance = { }
+wave.context = {}
+wave.output = {}
+wave.track = {}
+wave.instance = {}
 
 function wave.createContext(clock, volume)
 	clock = clock or os.clock()
 	volume = volume or 1.0
 
-	local context = setmetatable({ }, {__index = wave.context})
-	context.outputs = { }
-	context.instances = { }
-	context.vs = {0, 0, 0, 0, 0}
+	local context = setmetatable({}, { __index = wave.context })
+	context.outputs = {}
+	context.instances = {}
+	context.vs = { 0, 0, 0, 0, 0 }
 	context.prevClock = clock
 	context.volume = volume
 	return context
@@ -88,7 +88,7 @@ function wave.context:addOutput(...)
 end
 
 function wave.context:addOutputs(...)
-	local outs = {...}
+	local outs = { ... }
 	if #outs == 1 then
 		if not getmetatable(outs) then
 			outs = outs[1]
@@ -178,15 +178,13 @@ function wave.context:update(interval)
 	end
 end
 
-
-
 function wave.createOutput(out, volume, filter, throttle, clipMode)
 	volume = volume or 1.0
-	filter = filter or {true, true, true, true, true}
+	filter = filter or { true, true, true, true, true }
 	throttle = throttle or wave._defaultThrottle
 	clipMode = clipMode or wave._defaultClipMode
 
-	local output = setmetatable({ }, {__index = wave.output})
+	local output = setmetatable({}, { __index = wave.output })
 	output.native = out
 	output.volume = volume
 	output.filter = filter
@@ -204,9 +202,10 @@ function wave.createOutput(out, volume, filter, throttle, clipMode)
 				output.type = "iron_noteblock"
 				function output.nativePlayNote(note, pitch, vol)
 					if output.volume * vol > 0 then
-						nb.playSound("minecraft:block.note."..wave._newSoundMap[note], vol, math.pow(2, (pitch - 12) / 12))
+						nb.playSound("minecraft:block.note." .. wave._newSoundMap[note], vol, math.pow(2, (pitch - 12) / 12))
 					end
 				end
+
 				return output
 			end
 		elseif peripheral.getType(out) == "speaker" then
@@ -218,6 +217,7 @@ function wave.createOutput(out, volume, filter, throttle, clipMode)
 						nb.playNote(wave._newSoundMap[note], vol, pitch)
 					end
 				end
+
 				return output
 			end
 		end
@@ -226,11 +226,13 @@ function wave.createOutput(out, volume, filter, throttle, clipMode)
 			output.type = "commands"
 			if wave._isNewSystem then
 				function output.nativePlayNote(note, pitch, vol)
-					out.execAsync("playsound minecraft:block.note."..wave._newSoundMap[note].." record @a ~ ~ ~ "..tostring(vol).." "..tostring(math.pow(2, (pitch - 12) / 12)))
+					out.execAsync("playsound minecraft:block.note." ..
+						wave._newSoundMap[note] .. " record @a ~ ~ ~ " .. tostring(vol) .. " " .. tostring(math.pow(2, (pitch - 12) / 12)))
 				end
 			else
 				function output.nativePlayNote(note, pitch, vol)
-					out.execAsync("playsound note."..wave._oldSoundMap[note].." @a ~ ~ ~ "..tostring(vol).." "..tostring(math.pow(2, (pitch - 12) / 12)))
+					out.execAsync("playsound note." ..
+						wave._oldSoundMap[note] .. " @a ~ ~ ~ " .. tostring(vol) .. " " .. tostring(math.pow(2, (pitch - 12) / 12)))
 				end
 			end
 			return output
@@ -243,7 +245,7 @@ function wave.createOutput(out, volume, filter, throttle, clipMode)
 end
 
 function wave.scanOutputs()
-	local outs = { }
+	local outs = {}
 	if commands then
 		outs[#outs + 1] = wave.createOutput(commands)
 	end
@@ -284,10 +286,8 @@ function wave.output:playNote(note, pitch, volume)
 	end
 end
 
-
-
 function wave.loadTrack(path)
-	local track = setmetatable({ }, {__index = wave.track})
+	local track = setmetatable({}, { __index = wave.track })
 	local handle = fs.open(path, "rb")
 	if not handle then return end
 
@@ -303,10 +303,11 @@ function wave.loadTrack(path)
 		end
 		return num
 	end
+
 	local function readStr()
 		local length = readInt(4)
 		if not length then return end
-		local data = { }
+		local data = {}
 		for i = 1, length do
 			data[i] = string.char(handle.read())
 		end
@@ -332,10 +333,10 @@ function wave.loadTrack(path)
 	track.schematicFileName = readStr() -- midi/schematic file name
 
 	-- Part #2: Notes
-	track.layers = { }
+	track.layers = {}
 	for i = 1, track.height do
-		track.layers[i] = {name = "Layer "..i, volume = 1.0}
-		track.layers[i].notes = { }
+		track.layers[i] = { name = "Layer " .. i, volume = 1.0 }
+		track.layers[i].notes = {}
 	end
 
 	local tick = 0
@@ -350,8 +351,8 @@ function wave.loadTrack(path)
 			layer = layer + layerJumps
 			if layer > track.height then -- nbs can be buggy
 				for i = track.height + 1, layer do
-					track.layers[i] = {name = "Layer "..i, volume = 1.0}
-					track.layers[i].notes = { }
+					track.layers[i] = { name = "Layer " .. i, volume = 1.0 }
+					track.layers[i].notes = {}
 				end
 				track.height = layer
 			end
@@ -376,27 +377,25 @@ function wave.loadTrack(path)
 	return track
 end
 
-
-
 function wave.createInstance(track, volume, playing, loop)
 	volume = volume or 1.0
 	playing = (playing == nil) or playing
-	loop = (loop ~=  nil) and loop
+	loop = (loop ~= nil) and loop
 
 	if getmetatable(track).__index == wave.instance then
 		return track
 	end
-	local instance = setmetatable({ }, {__index = wave.instance})
+	local instance = setmetatable({}, { __index = wave.instance })
 	instance.track = track
 	instance.volume = volume or 1.0
 	instance.playing = playing
 	instance.loop = loop
 	instance.tick = 1
 	return instance
-end 
+end
 
 function wave.instance:update(interval)
-	local notes = { }
+	local notes = {}
 	if self.playing then
 		local dticks = interval * self.track.tempo
 		local starttick = self.tick
@@ -421,7 +420,5 @@ function wave.instance:update(interval)
 	end
 	return notes
 end
-
-
 
 return wave

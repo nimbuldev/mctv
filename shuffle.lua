@@ -101,8 +101,14 @@ local function handleKeypress(key)
         playSong(currentSongIndex)
     elseif (key == 205) then
         interval = interval + 0.01
+        if (interval > 0.99) then
+            interval = 0.99
+        end
     elseif (key == 203) then
         interval = interval - 0.01
+        if (interval < 0.05) then
+            interval = 0.05
+        end
     elseif (key == 16) then
         os.queueEvent("terminate")
     end
