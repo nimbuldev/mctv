@@ -1,4 +1,3 @@
-
 local screenWidth, screenHeight = term.getSize()
 local args = {...}
 
@@ -28,18 +27,9 @@ local function init()
     CurrentSongIndex = math.random(1, #files)
 end
 
-local function playSong(songIndex)
-    context:removeInstance(1)
-    os.sleep(0.2)
-    local fname = files[songIndex]
-    local t = wave.loadTrack("/music/" .. fname)
-    instance = context:addInstance(t)
-end
-
 local function draw()
     term.clear()
     term.setCursorPos(1,1)
-    
     local numElements = screenHeight - 8
     local bound = CurrentSongIndex - math.floor(numElements / 2)
     for i=1, numElements do
@@ -73,13 +63,36 @@ local function draw()
     print("Press Q to quit, left/right to change Interval, up/down to change song")      
 end
 
+local function playSong(songIndex)
+    
+    if Interval < 0.05 then
+        Interval = 0.05
+    end
+    if Interval > 0.99 then
+        Interval = 0.99
+    end
+    draw()
+    context:removeInstance(1)
+    local fname = files[songIndex]
+    local t = wave.loadTrack("/music/" .. fname)
+    instance = context:addInstance(t)
+end
+
+
 
 local function handleKeypress(key)
+    
     if (key == 208) then
         CurrentSongIndex = CurrentSongIndex + 1
+        if (CurrentSongIndex > #files) then
+            CurrentSongIndex = 1
+        end
         playSong(CurrentSongIndex)
     elseif (key == 200) then
         CurrentSongIndex = CurrentSongIndex - 1
+        if (CurrentSongIndex < 1) then
+            CurrentSongIndex = #files
+        end
         playSong(CurrentSongIndex)
     elseif (key == 205) then
         Interval = Interval + 0.01
@@ -87,17 +100,6 @@ local function handleKeypress(key)
         Interval = Interval - 0.01
     elseif (key == 16) then
         os.queueEvent("terminate")
-    end
-    if (CurrentSongIndex < 1) then
-        CurrentSongIndex = #files
-    elseif (CurrentSongIndex > #files) then
-        CurrentSongIndex = 1
-    end
-    if Interval < 0.05 then
-        Interval = 0.05
-    end
-    if Interval > 0.99 then
-        Interval = 0.99
     end
     draw()
 end
@@ -110,7 +112,7 @@ end
 local function tick()
     local e = {os.pullEvent()}
     if e[1] == "timer" and e[2] == Timer then
-			Timer = os.startTimer(0)
+			Timer = os.startTimer(Interval)
 			local prevtick = instance.tick
 			context:update()
 			if prevtick > 1 and instance.tick == 1 then
