@@ -1,11 +1,22 @@
 
 local screenWidth, screenHeight = term.getSize()
 local args = {...}
-local wave = dofile("apis/wave.lua")
-Interval = 0.05
+
+-- Need to test other wave api versions
+local wave = dofile("apis/wave.lua") 
 local files = {}
 local context = {}
 local instance = {}
+Running = true
+Timer = 0
+Interval = 0.05
+
+local function playSong(songIndex)
+    local fname = files[songIndex]
+    context:removeInstance(1)
+    local t = wave.loadTrack("/music/" .. fname)
+    instance = context:addInstance(t)
+end
 
 local function draw()
     if (CurrentSongIndex < 1) then
@@ -53,8 +64,10 @@ end
 local function handleKeypress(key)
     if (key == 208) then
         CurrentSongIndex = CurrentSongIndex + 1
+        playSong(files[CurrentSongIndex])
     elseif (key == 200) then
         CurrentSongIndex = CurrentSongIndex - 1
+        playSong(files[CurrentSongIndex])
     elseif (key == 205) then
         Interval = Interval + 0.01
     elseif (key == 203) then
@@ -83,9 +96,9 @@ local function init()
 
     context = wave.createContext()
     context:addOutputs(outputs)
-    local timer = os.startTimer(0.05)
     files = fs.list("/music")
     CurrentSongIndex = math.random(1, #files)
+    draw()
 end
 
 local function nextSong()
@@ -94,15 +107,13 @@ end
 
 local function tick()
     local e = {os.pullEvent()}
-    local timer = os.startTimer(0.05)
-    if e[1] == "timer" and e[2] == timer then
-			timer = os.startTimer(0)
+    if e[1] == "timer" and e[2] == Timer then
+			Timer = os.startTimer(0)
 			local prevtick = instance.tick
 			context:update()
 			if prevtick > 1 and instance.tick == 1 then
 				nextSong()
 			end
-			draw()
 		elseif e[1] == "term_resize" then
 			screenWidth, screenHeight = term.getSize()
 		elseif e[1] == "key" then
@@ -110,16 +121,18 @@ local function tick()
 		end
 end
 
-local function playSong(songIndex)
-    local fname = files[songIndex]
-    context:removeInstance(1)
-    local t = wave.loadTrack("/music/" .. fname)
-    instance = context:addInstance(t)
+
+local function run()
+    Timer = os.startTimer(0.05)
+    while Running do
+        tick()
+    end
 end
 
-init()
-playSong(CurrentSongIndex)
-draw()
-while true do
-    tick()
+local function main()
+    init()
+    playSong(CurrentSongIndex)
+    run()
 end
+
+main()
