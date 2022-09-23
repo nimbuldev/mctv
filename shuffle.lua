@@ -24,6 +24,7 @@ local function init()
     context = wave.createContext()
     context:addOutputs(outputs)
     files = fs.list("/music")
+    print(files)
     CurrentSongIndex = math.random(1, #files)
 end
 
@@ -78,10 +79,10 @@ end
 local function handleKeypress(key)
     if (key == 208) then
         CurrentSongIndex = CurrentSongIndex + 1
-        playSong(files[CurrentSongIndex])
+        playSong(files[ CurrentSongIndex ])
     elseif (key == 200) then
         CurrentSongIndex = CurrentSongIndex - 1
-        playSong(files[CurrentSongIndex])
+        playSong(files[ CurrentSongIndex ])
     elseif (key == 205) then
         Interval = Interval + 0.01
     elseif (key == 203) then
