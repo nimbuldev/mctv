@@ -25,7 +25,6 @@ local function init()
     context:addOutputs(outputs)
     files = fs.list("/music")
     CurrentSongIndex = math.random(1, #files)
-    draw()
 end
 
 local function playSong(songIndex)
@@ -33,6 +32,7 @@ local function playSong(songIndex)
     print("Playing song " .. songIndex)
     print("#files = " .. #files)
     local fname = files[songIndex]
+    print(fname)
     local t = wave.loadTrack("/music/" .. fname)
     instance = context:addInstance(t)
 end
@@ -127,6 +127,7 @@ end
 
 local function run()
     Timer = os.startTimer(0.05)
+    draw()
     while Running do
         tick()
     end
