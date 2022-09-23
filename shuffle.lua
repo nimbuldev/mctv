@@ -40,11 +40,17 @@ local function draw()
             term.setTextColor(colors.white)
         end
         if (i + bound < 1) then
-            term.write(files[i + bound + #files])
+            local name = files[i + bound + #files]
+            name = name:gsub(".nbs", ""):gsub("_", " ")
+            term.write(name)
         elseif (i + bound > #files) then
-            term.write(files[i + bound - #files])
+            local name = files[i + bound - #files]
+            name = name:gsub(".nbs", ""):gsub("_", " ")
+            term.write(name)
         else
-            term.write(files[i + bound])
+            local name = files[i + bound]
+            name = name:gsub(".nbs", ""):gsub("_", " ")
+            term.write(name)
         end
 
     end
