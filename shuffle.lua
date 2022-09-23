@@ -11,10 +11,27 @@ Running = true
 Timer = 0
 Interval = 0.05
 
+local function init()
+    if #args ~= 0 then
+        print("Does not take arguments, plays all songs in the music folder, press up/down to change the Interval, left/right to change the song")
+        return
+    end
+    local outputs = wave.scanOutputs()
+    if #outputs == 0 then
+        error("no outputs found")
+    end
+
+    context = wave.createContext()
+    context:addOutputs(outputs)
+    files = fs.list("/music")
+    CurrentSongIndex = math.random(1, #files)
+    draw()
+end
+
 local function playSong(songIndex)
     context:removeInstance(1)
     print("Playing song " .. songIndex)
-    print("#files = " .. #files)")
+    print("#files = " .. #files)
     local fname = files[songIndex]
     local t = wave.loadTrack("/music/" .. fname)
     instance = context:addInstance(t)
@@ -86,22 +103,6 @@ local function handleKeypress(key)
     draw()
 end
 
-local function init()
-    if #args ~= 0 then
-        print("Does not take arguments, plays all songs in the music folder, press up/down to change the Interval, left/right to change the song")
-        return
-    end
-    local outputs = wave.scanOutputs()
-    if #outputs == 0 then
-		error("no outputs found")
-	end
-
-    context = wave.createContext()
-    context:addOutputs(outputs)
-    files = fs.list("/music")
-    CurrentSongIndex = math.random(1, #files)
-    draw()
-end
 
 local function nextSong()
     CurrentSongIndex = CurrentSongIndex + 1
