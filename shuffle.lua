@@ -24,29 +24,13 @@ local function init()
     context = wave.createContext()
     context:addOutputs(outputs)
     files = fs.list("/music")
-    print(files)
     CurrentSongIndex = math.random(1, #files)
-end
-
-local function dump(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. dump(v) .. ','
-      end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
 end
 
 local function playSong(songIndex)
     context:removeInstance(1)
     print("Playing song " .. songIndex)
-    print(dump(files))
     local fname = files[songIndex]
-    print(fname)
     local t = wave.loadTrack("/music/" .. fname)
     instance = context:addInstance(t)
 end
@@ -92,10 +76,10 @@ end
 local function handleKeypress(key)
     if (key == 208) then
         CurrentSongIndex = CurrentSongIndex + 1
-        playSong(files[ CurrentSongIndex ])
+        playSong(CurrentSongIndex)
     elseif (key == 200) then
         CurrentSongIndex = CurrentSongIndex - 1
-        playSong(files[ CurrentSongIndex ])
+        playSong(CurrentSongIndex)
     elseif (key == 205) then
         Interval = Interval + 0.01
     elseif (key == 203) then
