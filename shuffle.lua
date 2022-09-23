@@ -116,7 +116,7 @@ end
 local function tick()
     local e = { os.pullEvent() }
     if e[1] == "timer" and e[2] == timer then
-        timer = os.starttimer(interval)
+        timer = os.startTimer(interval)
         local prevtick = instance.tick
         context:update()
         if prevtick > 1 and instance.tick == 1 then
@@ -130,7 +130,7 @@ local function tick()
 end
 
 local function run()
-    timer = os.starttimer(0.05)
+    timer = os.startTimer(0.05)
     draw()
     while running do
         tick()
