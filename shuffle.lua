@@ -14,6 +14,7 @@ Interval = 0.05
 local function init()
     if #args ~= 0 then
         print("Does not take arguments, plays all songs in the music folder, press up/down to change the Interval, left/right to change the song")
+        os.queueEvent("terminate")
         return
     end
     local outputs = wave.scanOutputs()
@@ -29,7 +30,7 @@ end
 
 local function playSong(songIndex)
     context:removeInstance(1)
-    print("Playing song " .. songIndex)
+    os.sleep(0.2)
     local fname = files[songIndex]
     local t = wave.loadTrack("/music/" .. fname)
     instance = context:addInstance(t)
