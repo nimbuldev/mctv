@@ -12,9 +12,10 @@ Timer = 0
 Interval = 0.05
 
 local function playSong(songIndex)
-    print("Playing song " .. songIndex)
-    local fname = files[songIndex]
     context:removeInstance(1)
+    print("Playing song " .. songIndex)
+    print("#files = " .. #files)")
+    local fname = files[songIndex]
     local t = wave.loadTrack("/music/" .. fname)
     instance = context:addInstance(t)
 end
