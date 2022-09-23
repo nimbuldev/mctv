@@ -21,7 +21,6 @@ local function init()
     if #outputs == 0 then
         error("no outputs found")
     end
-
     context = wave.createContext()
     context:addOutputs(outputs)
     files = fs.list("/music")
@@ -53,7 +52,6 @@ local function draw()
             name = name:gsub(".nbs", ""):gsub("_", " ")
             term.write(name)
         end
-
     end
     term.setCursorPos(1, numElements + 1)
     term.setTextColor(colors.white)
@@ -71,7 +69,6 @@ local function draw()
 end
 
 local function playSong(songIndex)
-
     if interval < 0.05 then
         interval = 0.05
     end
@@ -86,7 +83,6 @@ local function playSong(songIndex)
 end
 
 local function handleKeypress(key)
-
     if (key == 208) then
         currentSongIndex = currentSongIndex + 1
         if (currentSongIndex > #files) then
@@ -117,6 +113,10 @@ end
 
 local function nextSong()
     currentSongIndex = currentSongIndex + 1
+    if (currentSongIndex > #files) then
+        currentSongIndex = 1
+    end
+    playSong(currentSongIndex)
 end
 
 local function tick()
